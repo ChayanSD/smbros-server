@@ -1,0 +1,50 @@
+export class AppError extends Error {
+  public status: number;
+  public details?: any;
+
+  constructor(message: string, status = 500, details?: any) {
+    super(message);
+    this.status = status;
+    this.details = details;
+
+    // Fix prototype chain (important for instanceof checks)
+    Object.setPrototypeOf(this, new.target.prototype);
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+export class BadRequestError extends AppError {
+  constructor(message = 'Bad Request', details?: any) {
+    super(message, 400, details);
+  }
+}
+
+export class UnauthorizedError extends AppError {
+  constructor(message = 'Unauthorized', details?: any) {
+    super(message, 401, details);
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message = 'Forbidden', details?: any) {
+    super(message, 403, details);
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(message = 'Not Found', details?: any) {
+    super(message, 404, details);
+  }
+}
+
+export class ConflictError extends AppError {
+  constructor(message = 'Conflict', details?: any) {
+    super(message, 409, details);
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(message = 'Validation Error', details?: any) {
+    super(message, 422, details);
+  }
+}

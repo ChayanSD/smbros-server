@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String           @id @default(cuid())
+  stripeCustomerId String?          @unique
+  accountType      AccountType      @default(Bidding)
+  firstName        String
+  middleName       String? 
+  lastName         String
+  email            String           @unique
+  phone            String
+  password         String
+  termsAccepted    Boolean
+  newsletter       Boolean
+  isVerified       Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  billingAddress   BillingAddress? 
+  shippingAddress  ShippingAddress? 
+  payments         Payment[]
+
+  @@index([email])
+  @@map("users")
+}
+
+enum AccountType {
+  Bidding
+  Seller
+}
+
+model BillingAddress {
+  id         String  @id @default(cuid())
+  user       User    @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId     String  @unique
+  country    String
+  address1   String
+  address2   String?
+  city       String
+  postcode   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("billing_addresses")
+}
+
+model ShippingAddress {
+  id         String  @id @default(cuid())
+  user       User    @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId     String  @unique
+  country    String
+  address1   String
+  address2   String?
+  city       String
+  postcode   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("shipping_addresses")
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  cardHolder    String
+  last4         String
+  expiryMonth   Int
+  expiryYear    Int
+  stripeId      String  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("payments")
+}
