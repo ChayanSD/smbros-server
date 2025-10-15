@@ -81,3 +81,9 @@ model Payment {
 
   @@map("payments")
 }
+
+
+model TestData {
+  id       String   @id @default(cuid())
+  text    String
+}
