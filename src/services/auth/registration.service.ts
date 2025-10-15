@@ -1,7 +1,7 @@
-import { prisma } from '../lib/db';
+import { prisma } from '../../lib/db';
 import bcrypt from 'bcryptjs';
-import stripe from '../lib/stripe';
-import { RegistrationData } from '../schemas/registration.schema';
+import { RegistrationData } from '../../schemas/auth/registration.schema';
+import stripe from '../../lib/stripe';
 
 export const registerUser = async (data: RegistrationData) => {
   // 1. Hash password
@@ -56,48 +56,18 @@ export const registerUser = async (data: RegistrationData) => {
     }
   });
 
-  // 6. Stripe: create SetupIntent
-  const setupIntent = await stripe.setupIntents.create({
-    customer: customer.id,
-    payment_method_types: ['card'],
-  });
-
-  // 7. Stripe: create PaymentMethod
-  const paymentMethod = await stripe.paymentMethods.create({
-    type: 'card',
-    card: {
-      number: data.payment.cardNumber,
-      exp_month: data.payment.expMonth,
-      exp_year: data.payment.expYear,
-      cvc: data.payment.cvc,
-    },
-    billing_details: {
-      name: data.payment.cardHolder,
-    },
-  });
-
-  await stripe.paymentMethods.attach(paymentMethod.id, { customer: customer.id });
-
-  await stripe.customers.update(customer.id, {
-    invoice_settings: { default_payment_method: paymentMethod.id },
-  });
-
-  // 8. Save minimal payment info
-  const last4 = data.payment.cardNumber.slice(-4);
-  await prisma.payment.create({
-    data: {
-      userId,
-      cardHolder: data.payment.cardHolder,
-      last4,
-      expiryMonth: data.payment.expMonth,
-      expiryYear: data.payment.expYear,
-      stripeId: paymentMethod.id,
-    },
-  });
-
-  // 9. Mark verified
-  return prisma.user.update({
+  await prisma.user.update({
     where: { id: userId },
-    data: { isVerified: true },
+    data: { stripeCustomerId: customer.id },
   });
+
+  return {
+    id: user.id,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    accountType: user.accountType,
+    isVerified: user.isVerified,
+    stripeCustomerId : customer.id
+  }
 };

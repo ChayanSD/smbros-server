@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { registrationSchema } from '../schemas/registration.schema';
-import { registerUser } from '../services/registration.service';
-import { ResponseHandler } from '../utils/responseHandler';
+import { registrationSchema } from '../../schemas/auth/registration.schema';
+import { registerUser } from '../../services/auth/registration.service';
+import { ResponseHandler } from '../../utils/responseHandler';
 
 export const registerController = async (req: Request, res: Response, next: NextFunction) => {
   try {

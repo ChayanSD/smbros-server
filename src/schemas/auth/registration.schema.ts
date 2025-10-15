@@ -26,13 +26,13 @@ const registrationSchema = z.object({
       city: z.string().optional(),
       postcode: z.string().optional(),
     }),
-    payment: z.object({
-      cardHolder: z.string(),
-      cardNumber: z.string(),
-      expMonth: z.number(),
-      expYear: z.number(),
-      cvc: z.string(),
-    }),
+    // payment: z.object({
+    //   cardHolder: z.string(),
+    //   cardNumber: z.string(),
+    //   expMonth: z.number(),
+    //   expYear: z.number(),
+    //   cvc: z.string(),
+    // }),
   }),
 });
 
