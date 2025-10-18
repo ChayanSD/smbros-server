@@ -6,12 +6,18 @@ import { errorHandler } from "./middleware/errorHandler";
 import registrationRoutes from "./routes/auth/registration.routes";
 import stripeCustomerCardAttatchRoutes from "./routes/stripe/stripeCustomer.route";
 import loginRoutes from "./routes/auth/login.route";
+import categoryRoutes from "./routes/category/category.route";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors({
+    origin : "*",
+    methods : ["GET","POST","PUT","DELETE"],
+    credentials : true,
+}));
 
 
 const redisStore = new RedisStore({
@@ -34,6 +40,7 @@ app.use(session({
 // Routes
 app.use("/api/user", registrationRoutes , loginRoutes);
 app.use("api/stripe", stripeCustomerCardAttatchRoutes);
+app.use("/api/category",categoryRoutes )
 
 // Global error handler (should be after routes)
 app.use(errorHandler);

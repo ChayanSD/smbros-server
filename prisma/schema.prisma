@@ -83,7 +83,63 @@ model Payment {
 }
 
 
-model TestData {
-  id       String   @id @default(cuid())
-  text    String
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  auctions  Auction[]
+
+  @@map("categories")
+}
+
+
+model Auction {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  slug        String         @unique
+  status      AuctionStatus  @default(Draft)
+  tags        TagOnAuction[] 
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  categoryId String
+  category   Category       @relation(fields: [categoryId], references: [id])
+
+  @@index([slug])
+  @@index([status])
+  @@map("auctions")
+}
+
+enum AuctionStatus {
+  Draft
+  Upcoming
+  Active
+  Ended
+  Cancelled
+}
+
+model Tag {
+  id        String          @id @default(cuid())
+  name      String          @unique
+  auctions  TagOnAuction[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@map("tags")
+}
+
+model TagOnAuction {
+  auctionId String
+  tagId     String
+  auction   Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([auctionId, tagId])
+  @@map("auction_tags")
 }
