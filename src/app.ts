@@ -8,6 +8,7 @@ import stripeCustomerCardAttatchRoutes from "./routes/stripe/stripeCustomer.rout
 import loginRoutes from "./routes/auth/login.route";
 import categoryRoutes from "./routes/category/category.route";
 import auctionRouter from "./routes/auction/auction.route";
+import auctionItemRouter from "./routes/auction/auctionItem.route";
 import cors from "cors";
 
 const app = express();
@@ -43,7 +44,7 @@ app.use("/api/user", registrationRoutes , loginRoutes);
 app.use("api/stripe", stripeCustomerCardAttatchRoutes);
 app.use("/api/category",categoryRoutes );
 app.use("/api/auction", auctionRouter);
-
+app.use("/api/auction-item",auctionItemRouter)
 // Global error handler (should be after routes)
 app.use(errorHandler);
 
