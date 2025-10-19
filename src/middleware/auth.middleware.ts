@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { ResponseHandler } from "../utils/responseHandler";
-import { prisma } from "../lib/db";
 
 export const isAuthenticated = async (
   req: Request,
@@ -8,31 +7,17 @@ export const isAuthenticated = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.session.userId;
-    if (!userId) {
+    const user = req.session.user;
+
+    // If no session or user info, block access
+    if (!user || !user.id || !user.email || !user.accountType) {
       return ResponseHandler.error(res, "Unauthorized: Not logged in", 401);
     }
 
-    // 2. Optionally load user info from DB (only if needed)
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        isVerified: true,
-        accountType: true,
-      },
-    });
+    // Attach the user object from session to req for convenience
+    req.user = user;
 
-    if (!user) {
-      req.session.destroy(() => {});
-      return ResponseHandler.error(res, "User not found or deleted", 401);
-    }
-
-    req.user = user; 
-    
+    // Proceed — no DB hit needed
     next();
   } catch (err) {
     console.error("Auth middleware error:", err);

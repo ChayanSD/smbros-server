@@ -9,6 +9,7 @@ import loginRoutes from "./routes/auth/login.route";
 import categoryRoutes from "./routes/category/category.route";
 import auctionRouter from "./routes/auction/auction.route";
 import auctionItemRouter from "./routes/auction/auctionItem.route";
+import userRoutes from "./routes/user/user.route";
 import cors from "cors";
 
 const app = express();
@@ -40,7 +41,7 @@ app.use(session({
 }));
 
 // Routes
-app.use("/api/user", registrationRoutes , loginRoutes);
+app.use("/api/user", registrationRoutes , loginRoutes , userRoutes);
 app.use("api/stripe", stripeCustomerCardAttatchRoutes);
 app.use("/api/category",categoryRoutes );
 app.use("/api/auction", auctionRouter);

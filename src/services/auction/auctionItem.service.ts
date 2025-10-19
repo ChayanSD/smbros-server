@@ -56,7 +56,16 @@ export const auctionItemService = {
   async getAllAuctionItems() {
     const auctionItems = await prisma.auctionItem.findMany({
       include : {
-        productImages : true
+        productImages : true,
+        auction : {
+          select : {
+            id : true,
+            name : true,
+            startDate : true,
+            endDate : true,
+            slug : true
+          }
+        }
       }
     });
     return auctionItems;
