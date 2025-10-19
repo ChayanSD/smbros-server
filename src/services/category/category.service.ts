@@ -13,7 +13,9 @@ export const categoryService = {
   },
 
   async getCategories() {
-    const categories = await prisma.category.findMany();
+    const categories = await prisma.category.findMany({
+      orderBy: { createdAt: "desc" },
+    });
     return categories;
   },
 

@@ -9,6 +9,7 @@ declare global {
         firstName: string;
         lastName: string;
         isVerified: boolean;
+        accountType: string;
       };
     }
   }

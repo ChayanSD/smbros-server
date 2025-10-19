@@ -8,9 +8,7 @@ export const isAuthenticated = async (
   next: NextFunction
 ) => {
   try {
-    console.log("Session data:", req.session);
     const userId = req.session.userId;
-    console.log("Middleware session userId:", userId);
     if (!userId) {
       return ResponseHandler.error(res, "Unauthorized: Not logged in", 401);
     }
@@ -24,6 +22,7 @@ export const isAuthenticated = async (
         firstName: true,
         lastName: true,
         isVerified: true,
+        accountType: true,
       },
     });
 

@@ -16,8 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin : "*",
-    methods : ["GET","POST","PUT","DELETE"],
+    origin : "http://localhost:3000",
     credentials : true,
 }));
 
@@ -34,7 +33,8 @@ app.use(session({
     saveUninitialized : false,
     cookie : {
         secure : false,
-        httpOnly : false,
+        httpOnly : true,
+        sameSite : "lax",
         maxAge: 1000 * 60 * 60 * 24,
     }
 }));
