@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const registrationSchema = z.object({
   body: z.object({
-    accountType: z.enum(['Bidding', 'Seller']).optional(),
+    accountType: z.enum(['Bidding', 'Seller', 'Admin']).optional(),
     firstName: z.string().min(2),
     middleName: z.string().optional(),
     lastName: z.string().min(2),
