@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { customerCardAttach } from "../../services/stripe/attatcCard.service"; 
+import { customerCardAttach } from "../../services/stripe/attachCard.service";
 import { ResponseHandler } from "../../utils/responseHandler";
 
 export const setupIntentController = async (req: Request, res: Response , next : NextFunction) => {
@@ -14,7 +14,7 @@ export const setupIntentController = async (req: Request, res: Response , next :
 export const attachCardController = async (req: Request, res: Response , next : NextFunction) => {
   try {
     const result = await customerCardAttach.attachCard(req.body);
-    res.status(200).json(result);
+    ResponseHandler.success(res, result, "Card attached successfully");
   } catch (error) {
     next(error);
   }

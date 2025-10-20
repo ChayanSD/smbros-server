@@ -42,7 +42,7 @@ app.use(session({
 
 // Routes
 app.use("/api/user", registrationRoutes , loginRoutes , userRoutes);
-app.use("api/stripe", stripeCustomerCardAttatchRoutes);
+app.use("/api/stripe", stripeCustomerCardAttatchRoutes);
 app.use("/api/category",categoryRoutes );
 app.use("/api/auction", auctionRouter);
 app.use("/api/auction-item",auctionItemRouter)

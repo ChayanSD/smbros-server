@@ -5,9 +5,9 @@ import { ResponseHandler } from '../../utils/responseHandler';
 
 export const registerController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const parsed = registrationSchema.parse({ body: req.body }).body;
+    const parsed = registrationSchema.parse(req.body);
     const user = await registerUser(parsed);
-    ResponseHandler.success(res, user, 'Registration completed successfully');
+    ResponseHandler.created(res, user, 'Registration completed successfully');
   } catch (err) {
     next(err);
   }
