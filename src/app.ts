@@ -3,6 +3,7 @@ import session from "express-session";
 import redis from "./lib/redis";
 import  { RedisStore } from "connect-redis";
 import { errorHandler } from "./middleware/errorHandler";
+import config from "./config/config";
 import registrationRoutes from "./routes/auth/registration.routes";
 import stripeCustomerCardAttatchRoutes from "./routes/stripe/stripeCustomer.route";
 import loginRoutes from "./routes/auth/login.route";
@@ -10,7 +11,9 @@ import categoryRoutes from "./routes/category/category.route";
 import auctionRouter from "./routes/auction/auction.route";
 import auctionItemRouter from "./routes/auction/auctionItem.route";
 import userRoutes from "./routes/user/user.route";
+import bidRoutes from "./routes/bid/bid.route";
 import cors from "cors";
+
 
 const app = express();
 
@@ -29,7 +32,7 @@ const redisStore = new RedisStore({
 
 app.use(session({
     store : redisStore,
-    secret : "alkdsfjlajsd",
+    secret : config.sessionSecret,
     resave : false,
     saveUninitialized : false,
     cookie : {
@@ -46,6 +49,7 @@ app.use("/api/stripe", stripeCustomerCardAttatchRoutes);
 app.use("/api/category",categoryRoutes );
 app.use("/api/auction", auctionRouter);
 app.use("/api/auction-item",auctionItemRouter)
+app.use("/api/bid", bidRoutes);
 // Global error handler (should be after routes)
 app.use(errorHandler);
 
