@@ -19,8 +19,12 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const isProd = config.nodeEnv === "production";
+
 app.use(cors({
-    origin : "http://localhost:3000",
+   origin: isProd
+        ? "https://auction-site-ten.vercel.app"
+        : "http://localhost:3000",
     credentials : true,
 }));
 
@@ -36,9 +40,9 @@ app.use(session({
     resave : false,
     saveUninitialized : false,
     cookie : {
-        secure : false,
+        secure : isProd,
         httpOnly : true,
-        sameSite : "lax",
+        sameSite : isProd ? "none" : "lax",
         maxAge: 1000 * 60 * 60 * 24,
     }
 }));
