@@ -28,6 +28,9 @@ app.use(cors({
     credentials : true,
 }));
 
+if (isProd) {
+    app.set('trust proxy', 1);
+}
 
 const redisStore = new RedisStore({
     client: redis,
@@ -43,6 +46,7 @@ app.use(session({
         secure : isProd,
         httpOnly : true,
         sameSite : isProd ? "none" : "lax",
+        domain: isProd ? ".vercel.app" : undefined,
         maxAge: 1000 * 60 * 60 * 24,
     }
 }));
