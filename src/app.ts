@@ -51,6 +51,15 @@ app.use(session({
     }
 }));
 
+app.get("/__debug/session", (req, res) => {
+  res.json({
+    headersCookie: req.headers.cookie || null,
+    sessionID: req.sessionID || null,
+    session: req.session || null,
+  });
+});
+
+
 // Routes
 app.use("/api/user", registrationRoutes , loginRoutes , userRoutes);
 app.use("/api/stripe", stripeCustomerCardAttatchRoutes);
